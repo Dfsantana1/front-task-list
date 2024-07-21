@@ -1,21 +1,35 @@
 import { useMutation } from 'react-query';
 import api from '../api/axios';
+import { useNavigate } from 'react-router-dom';
+import { useAuthStore } from './useStore';
 
 interface LoginValues {
   email: string;
   password: string;
 }
 
-// Tipo para el error de la mutación
 type AxiosError = {
   message: string;
 };
 
 export const useAuth = () => {
+  const navigate = useNavigate();
+  const setUser = useAuthStore((state) => state.setUser); // Obtén la función setUser del store
+
   const loginMutation = useMutation(
-    (values: LoginValues) => api.post('/login', values),
+    (values: LoginValues) => api.post('/users/login', values),
     {
-      // Opcional: puedes manejar callbacks adicionales aquí si es necesario
+      onSuccess: (data) => {
+        console.log('Login successful:', data);
+
+        localStorage.setItem('token', data.data.token);
+
+        // Actualizar el estado global del usuario
+        setUser(data.data.user);
+
+        // Redirigir al usuario
+        navigate('/dashboard');
+      },
       onError: (error) => {
         console.error('Login failed:', error);
       },

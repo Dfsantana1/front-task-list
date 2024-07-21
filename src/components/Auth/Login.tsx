@@ -4,9 +4,11 @@ import * as Yup from 'yup';
 import { Button, Container, Row, Col, Alert, Spinner, Form } from 'react-bootstrap';
 import { useAuth } from '../../hooks/useAuth';
 import FormField from '../FormField';
+import { useNavigate } from 'react-router-dom';
 
 const Login: React.FC = () => {
-  const { login, isLoading, error } = useAuth();
+  const { login, isLoading, error, isSuccess } = useAuth();
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -22,14 +24,19 @@ const Login: React.FC = () => {
     }
   });
 
-  // Formatea el mensaje de error
+  React.useEffect(() => {
+    if (isSuccess) {
+      navigate('/dashboard'); 
+    }
+  }, [isSuccess, navigate]);
+
   const errorMessage = typeof error === 'string' ? error : (error as any)?.message || 'An unexpected error occurred';
 
   return (
-    <Container className="full-height full-with d-flex align-items-center justify-content-center p-3">
-      <Row   className="d-flex align-items-center justify-content-center border border-primary rounded p-4 shadow-sm bg-light">
+    <Container className="full-height d-flex align-items-center justify-content-center p-3">
+      <Row className="d-flex align-items-center justify-content-center border border-primary rounded p-4 shadow-sm bg-light">
         <Col md="12">
-          <h1 className="text-center">Sign In</h1>
+          <h1 className="text-center mb-4">Sign In</h1>
           <Form onSubmit={formik.handleSubmit}>
             <FormField
               label="Email address"
@@ -53,7 +60,7 @@ const Login: React.FC = () => {
               isInvalid={(formik.touched.password ?? false) && !!formik.errors.password}
               errorMessage={formik.touched.password ? formik.errors.password : ''}
             />
-          {error && <Alert variant="danger">{errorMessage}</Alert>}
+            {error && <Alert variant="danger" className="mt-3">{errorMessage}</Alert>}
             <Button variant="primary" type="submit" className="w-100 mt-3" disabled={isLoading}>
               {isLoading ? <Spinner animation="border" size="sm" /> : 'Sign In'}
             </Button>
