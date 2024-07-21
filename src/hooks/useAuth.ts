@@ -1,11 +1,14 @@
 import { useMutation } from 'react-query';
 import api from '../api/axios';
 import { useNavigate } from 'react-router-dom';
-import { LoginValues ,RegisterValues , AxiosError} from '../interfaces/AuthState';
-
+import { LoginValues, RegisterValues, AxiosError } from '../interfaces/AuthState';
+import { useAuthStore } from '../stores/useAuthStore';
 
 export const useAuth = () => {
   const navigate = useNavigate();
+  const { setUser } = useAuthStore(state => ({
+    setUser: state.setUser
+  }));
 
   const loginMutation = useMutation(
     (values: LoginValues) => api.post('/users/login', values),
@@ -13,6 +16,7 @@ export const useAuth = () => {
       onSuccess: (data) => {
         console.log('Login successful:', data);
         localStorage.setItem('token', data.data.token);
+        setUser(data.data.user); // Actualiza el estado global
         navigate('/dashboard'); 
       },
       onError: (error) => {
@@ -27,6 +31,7 @@ export const useAuth = () => {
       onSuccess: (data) => {
         console.log('Registration successful:', data);
         localStorage.setItem('token', data.data.token);
+        setUser(data.data.user); // Actualiza el estado global
         navigate('/dashboard'); 
       },
       onError: (error) => {
