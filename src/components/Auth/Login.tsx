@@ -33,8 +33,8 @@ const Login: React.FC = () => {
   const errorMessage = typeof error === 'string' ? error : (error as any)?.message || 'An unexpected error occurred';
 
   return (
-    <Container className="full-height d-flex align-items-center justify-content-center p-3">
-      <Row className="d-flex align-items-center justify-content-center border border-primary rounded p-4 shadow-sm bg-light">
+    <Container className="full-height d-flex align-items-center justify-content-center p-1">
+      <Row className="d-flex col-8  align-items-center justify-content-center border border-primary rounded p-2 shadow-sm bg-light">
         <Col md="12">
           <h1 className="text-center mb-4">Sign In</h1>
           <Form onSubmit={formik.handleSubmit}>
