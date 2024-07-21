@@ -1,21 +1,8 @@
 import { useMutation } from 'react-query';
 import api from '../api/axios';
 import { useNavigate } from 'react-router-dom';
+import { LoginValues ,RegisterValues , AxiosError} from '../interfaces/AuthState';
 
-interface LoginValues {
-  email: string;
-  password: string;
-}
-
-interface RegisterValues {
-  name: string;
-  email: string;
-  password: string;
-}
-
-type AxiosError = {
-  message: string;
-};
 
 export const useAuth = () => {
   const navigate = useNavigate();
