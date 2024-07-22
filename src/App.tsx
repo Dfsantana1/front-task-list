@@ -1,14 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { QueryClientProvider } from 'react-query';
+import { QueryClientProvider, QueryClient } from 'react-query';
 import { Container } from 'react-bootstrap';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
+import CreateEditTask from './components/Task/CreateTask';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
-// import Dashboard from './components/Dashboard';
-// import PrivateRoute from './components/PrivateRoute';
-import { QueryClient } from 'react-query';
+import PrivateRoute from './components/PrivateRoute';
 
 const queryClient = new QueryClient();
 
@@ -22,7 +21,8 @@ const App: React.FC = () => {
             <Routes>
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
-              {/* <Route path="/dashboard" element={<PrivateRoute element={<Dashboard />} path="/dashboard" />} /> */}
+              <Route path="/tasks/create" element={<PrivateRoute element={<CreateEditTask />} />} />
+              <Route path="/tasks/edit/:id" element={<PrivateRoute element={<CreateEditTask />} />} />
               {/* Agrega más rutas aquí */}
             </Routes>
           </Container>
